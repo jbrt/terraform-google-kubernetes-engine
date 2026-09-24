@@ -16,7 +16,7 @@
 
 module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  version = "~> 43.0"
+  version = "~> 44.0"
 
   project_id                        = var.project_id
   name                              = "random-test-cluster"
@@ -46,7 +46,7 @@ module "gke" {
   node_pools = [
     {
       name               = "my-node-pool"
-      machine_type       = "n1-standard-1"
+      machine_type       = "e2-medium"
       min_count          = 1
       max_count          = 1
       disk_size_gb       = 100

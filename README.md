@@ -13,7 +13,7 @@ Sub modules are provided for creating private clusters, beta private clusters, a
 
 ## Compatibility
 
-This module is meant for use with Terraform 1.3+ and tested using Terraform 1.10+.
+This module is meant for use with Terraform 1.3+ and tested using Terraform 1.14+.
 If you find incompatibilities using Terraform `>=1.3`, please open an issue.
 
 If you haven't [upgraded to 1.3][terraform-1.3-upgrade] and need a Terraform
@@ -168,6 +168,7 @@ Then perform the following commands on the root folder:
 | disable\_legacy\_metadata\_endpoints | Disable the /0.1/ and /v1beta1/ metadata server endpoints on the node. Changing this value will cause all node pools to be recreated. | `bool` | `true` | no |
 | dns\_allow\_external\_traffic | (Optional) Controls whether external traffic is allowed over the dns endpoint. | `bool` | `null` | no |
 | dns\_cache | The status of the NodeLocal DNSCache addon. | `bool` | `false` | no |
+| dns\_enable\_k8s\_tokens\_via\_dns | (Optional) Controls whether Kubernetes ServiceAccount token authentication is allowed via the DNS endpoint. | `bool` | `null` | no |
 | enable\_binary\_authorization | Enable BinAuthZ Admission controller | `bool` | `false` | no |
 | enable\_cilium\_clusterwide\_network\_policy | Enable Cilium Cluster Wide Network Policies on the cluster | `bool` | `false` | no |
 | enable\_confidential\_nodes | An optional flag to enable confidential node config. | `bool` | `false` | no |
@@ -240,7 +241,7 @@ Then perform the following commands on the root folder:
 | network\_tier\_config | Network tier configuration for the cluster | `string` | `null` | no |
 | node\_metadata | Specifies how node metadata is exposed to the workload running on the node | `string` | `"GKE_METADATA"` | no |
 | node\_pools | List of maps containing node pools | `list(map(any))` | <pre>[<br>  {<br>    "name": "default-node-pool"<br>  }<br>]</pre> | no |
-| node\_pools\_cgroup\_mode | Map of strings containing cgroup node config by node-pool name | `map(string)` | <pre>{<br>  "all": "",<br>  "default-node-pool": ""<br>}</pre> | no |
+| node\_pools\_cgroup\_mode | Map of strings containing cgroup node config by node-pool name. Note: GKE is removing cgroup v1 support in 1.35. | `map(string)` | <pre>{<br>  "all": "",<br>  "default-node-pool": ""<br>}</pre> | no |
 | node\_pools\_hugepage\_size\_1g | Map of strings containing hugepage size 1g config by node-pool name | `map(string)` | <pre>{<br>  "all": "",<br>  "default-node-pool": ""<br>}</pre> | no |
 | node\_pools\_hugepage\_size\_2m | Map of strings containing hugepage size 2m node config by node-pool name | `map(string)` | <pre>{<br>  "all": "",<br>  "default-node-pool": ""<br>}</pre> | no |
 | node\_pools\_labels | Map of maps containing node labels by node-pool name | `map(map(string))` | <pre>{<br>  "all": {},<br>  "default-node-pool": {}<br>}</pre> | no |
@@ -281,6 +282,7 @@ Then perform the following commands on the root folder:
 | timeouts | Timeout for cluster operations. | `map(string)` | `{}` | no |
 | total\_egress\_bandwidth\_tier | Specifies the total network bandwidth tier for NodePools in the cluster. Valid values are `TIER_UNSPECIFIED` and `TIER_1`. Defaults to `TIER_UNSPECIFIED`. | `string` | `null` | no |
 | upstream\_nameservers | If specified, the values replace the nameservers taken by default from the node’s /etc/resolv.conf | `list(string)` | `[]` | no |
+| user\_managed\_keys\_config | The User Managed Keys configuration for the cluster. | <pre>object({<br>    aggregation_ca                    = optional(string)<br>    cluster_ca                        = optional(string)<br>    control_plane_disk_encryption_key = optional(string)<br>    etcd_api_ca                       = optional(string)<br>    etcd_peer_ca                      = optional(string)<br>    gkeops_etcd_backup_encryption_key = optional(string)<br>    service_account_signing_keys      = optional(list(string))<br>    service_account_verification_keys = optional(list(string))<br>  })</pre> | `null` | no |
 | windows\_node\_pools | List of maps containing Windows node pools | `list(map(string))` | `[]` | no |
 | zones | The zones to host the cluster in (optional if regional cluster / required if zonal) | `list(string)` | `[]` | no |
 
@@ -365,6 +367,7 @@ The node_pools variable takes the following parameters:
 | image_type | The image type to use for this node. Note that changing the image type will delete and recreate all nodes in the node pool | COS_CONTAINERD | Optional |
 | initial_node_count | The initial number of nodes for the pool. In regional or multi-zonal clusters, this is the number of nodes per zone. Changing this will force recreation of the resource. Defaults to the value of min_count | " " | Optional |
 | insecure_kubelet_readonly_port_enabled | (boolean) Whether or not to enable the insecure Kubelet readonly port. | null | Optional |
+| single_process_oom_kill | (boolean) On cgroupv2 nodes, defines whether processes in the container are OOM killed individually (true) or as a group (false, the kubelet default). Leave null to keep the kubelet default. | null | Optional |
 | key | The key required for the taint | | Required |
 | logging_variant | The type of logging agent that is deployed by default for newly created node pools in the cluster. Valid values include DEFAULT and MAX_THROUGHPUT. | DEFAULT | Optional |
 | local_ssd_count | The amount of local SSD disks that will be attached to each cluster node and may be used as a `hostpath` volume or a `local` PersistentVolume. | 0 | Optional |
@@ -407,10 +410,12 @@ The node_pools variable takes the following parameters:
 | version | The Kubernetes version for the nodes in this pool. Should only be set if auto_upgrade is false | " " | Optional |
 | location_policy | [Location policy](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_node_pool#location_policy) specifies the algorithm used when scaling-up the node pool. Location policy is supported only in 1.24.1+ clusters. | " " | Optional |
 | secondary_boot_disk | Image of a secondary boot disk to preload container images and data on new nodes. For detail see [documentation](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster#nested_secondary_boot_disks). `gcfs_config` must be `enabled=true` for this feature to work. | | Optional |
+| secondary_boot_disk_mode | Mode for the secondary boot disk. Defaults to `CONTAINER_IMAGE_CACHE` (preloads container images, requires `gcfs_config` enabled). Set to `null` to omit the field for data preloading (mounts data onto nodes for use via hostPath). | `"CONTAINER_IMAGE_CACHE"` | Optional |
 | queued_provisioning | Makes nodes obtainable through the ProvisioningRequest API exclusively. | | Optional |
 | gpu_sharing_strategy | The type of GPU sharing strategy to enable on the GPU node. Accepted values are: "TIME_SHARING" and "MPS". | | Optional |
 | max_shared_clients_per_gpu | The maximum number of containers that can share a GPU. | | Optional |
 | total_egress_bandwidth_tier |  Specifies the total network bandwidth tier. Valid values are: "TIER_1" and "TIER_UNSPECIFIED". |  | Optional |
+| pod_cidr_overprovision_disabled | Disables GKE's default doubling of the per-node pod IP range allocation when set to `true`. |  | Optional |
 | consume_reservation_type | The type of reservation consumption. Accepted values are: "UNSPECIFIED": Default value (should not be specified). "NO_RESERVATION": Do not consume from any reserved capacity, "ANY_RESERVATION": Consume any reservation available, "SPECIFIC_RESERVATION": Must consume from a specific reservation. Must specify key value fields for specifying the reservations. | | Optional |
 | reservation_affinity_key | The label key of a reservation resource. To target a SPECIFIC_RESERVATION by name, specify "compute.googleapis.com/reservation-name" as the key and specify the name of your reservation as its value. | | Optional |
 | reservation_affinity_values | The list of label values of reservation resources. For example: the name of the specific reservation when using a key of "compute.googleapis.com/reservation-name". This should be passed as comma separated string. | | Optional |
@@ -448,7 +453,7 @@ The [project factory](https://github.com/terraform-google-modules/terraform-goog
 #### Terraform and Plugins
 
 - [Terraform](https://www.terraform.io/downloads.html) 1.3+
-- [Terraform Provider for GCP][terraform-provider-google] v6.47+
+- [Terraform Provider for GCP][terraform-provider-google] v7.39+
 
 #### gcloud
 
@@ -480,6 +485,7 @@ In order to operate with the Service Account you must activate the following API
 - Kubernetes Engine API - container.googleapis.com
 
 [terraform-provider-google]: <https://github.com/terraform-providers/terraform-provider-google>
+[27.0.0]: <https://registry.terraform.io/modules/terraform-google-modules/kubernetes-engine/google/27.0.0>
 [12.3.0]: <https://registry.terraform.io/modules/terraform-google-modules/kubernetes-engine/google/12.3.0>
 [terraform-0.13-upgrade]: <https://www.terraform.io/upgrade-guides/0-13.html>
 [terraform-1.3-upgrade]: <https://developer.hashicorp.com/terraform/language/v1.3.x/upgrade-guides>

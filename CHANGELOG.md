@@ -6,6 +6,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Extending the adopted spec, each change should have a link to its corresponding pull request appended.
 
+## [45.0.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v44.3.0...v45.0.0) (2026-08-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=7.39:** add support for shutdown_grace_period_seconds and shutdown_grac… ([#2613](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2613))
+
+### Features
+
+* add pod_cidr_overprovision_config support ([#2594](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2594)) ([b1f2719](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/b1f2719ac4e57785ed6b7985e3df0d08c15c4910))
+* add support for managed machine learning diagnostics config ([#2634](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2634)) ([e1f99a3](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/e1f99a3caa095bd9ca1bf779106d9ac199c1758d))
+* **TPG>=7.39:** add support for shutdown_grace_period_seconds and shutdown_grac… ([#2613](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2613)) ([8091076](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/809107643ef596b4efd199f40c216ea420e005bf))
+
+
+### Bug Fixes
+
+* bump ip-masq-agent configmap to kubernetes_config_map_v1 ([#2627](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2627)) ([ae63c62](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/ae63c62bec157eb46d97568edb60413c83bee2fb))
+* make add_shadow_firewall_rules independent of add_cluster_firewall_rules ([#2617](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2617)) ([24236b3](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/24236b3134362cb114b02025db6cd5e93867cce9))
+
+## [44.3.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v44.2.0...v44.3.0) (2026-06-26)
+
+
+### Features
+
+* Add user_managed_keys_config support to GKE cluster modules ([#2603](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2603)) ([bd60cfe](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/bd60cfe05539fcf8100f6458c52b90210f6f1fa5))
+* expose dns_enable_k8s_tokens_via_dns for GKE DNS endpoint ([#2587](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2587)) ([59dbfdc](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/59dbfdcb5255c11e68c064b1af486beea4d4b62f))
+
+
+### Bug Fixes
+
+* avoid empty security_posture_config block ([#2593](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2593)) ([6997f1c](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/6997f1cd677c49dac1b750736e6218bd49ff5ade))
+* avoid master_global_access_config drift when private endpoint is disabled ([#2591](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2591)) ([94bdc6a](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/94bdc6a2e5529432bfebd3051cf660789ebeff5a))
+* prevent unnecessary node_pool_auto_config creation when cgroup mode is unset ([#2598](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2598)) ([2640d00](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/2640d0089ef31a52ad9e891e5609878378a86a94))
+* Replace deprecated kubernetes_service_account with kubernetes_service_account_v1 ([#2560](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2560)) ([9feedce](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/9feedcedc0afc98d97dc3b431f61fa5e32956443))
+
+## [44.2.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v44.1.0...v44.2.0) (2026-05-15)
+
+
+### Features
+
+* Add secret_sync_config support to all beta cluster modules ([#2573](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2573)) ([405c465](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/405c465d19281ac932429eba843cc57d1b84ddde))
+* allow configurable mode for secondary_boot_disk ([#2580](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2580)) ([45bf691](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/45bf691cd9c6e3e5181fafc37a873a457847cb06))
+
+## [44.1.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v44.0.0...v44.1.0) (2026-05-11)
+
+
+### Features
+
+* Add missing vpc connection for GKE Standard Cluster ([#2564](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2564)) ([a04f3ee](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/a04f3ee33444669aef536fb1b48704ceaf652700))
+
+
+### Bug Fixes
+
+* missing default_compute_class_enabled from safer-cluster ([#2548](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2548)) ([51b04ad](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/51b04ad058df6eb20ee75ccdeb6343e74822ca9f))
+* update Cgroup V2 transition ([#2575](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2575)) ([c383b04](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/c383b040c04e68cbaed076e16202e28809bb3771))
+
+## [44.0.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v43.0.0...v44.0.0) (2026-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **TPG>=7.17:** add support for node_drain_config ([#2535](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2535))
+* **TPG>=7.10:** bump min google provider to 7.10 for network_tier_config support ([#2527](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2527))
+
+### Features
+
+* Add private endpoint subnetwork variable for safer cluster modules ([#2540](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2540)) ([ca18dbc](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/ca18dbcb4faa76e25ff4f5f09f9c6d4ca032bc80))
+* allow cluster creation without node pool ([#2520](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2520)) ([8b65cd7](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/8b65cd72d75321bff3d72cad5ce7b7f4130da52a))
+* **sa:** Adjustment to the SA description and reference to the member attribute ([#2518](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2518)) ([b4ac6d9](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/b4ac6d995aa4715fb5e8c06d0bfab22863544393))
+* **TPG>=7.17:** add support for node_drain_config ([#2535](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2535)) ([1f95a65](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/1f95a655a3bcc1b35f37bf9df8f598a8bedfbf06))
+
+
+### Bug Fixes
+
+* Add example for multi network configuration for gke-node-pool module ([#2514](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2514)) ([11193a5](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/11193a57ff04aa2aaf8f43a5159eb115f2df7e5e))
+* auto_provisioning_defaults not created when enable_default_compute_class=true and NAP disabled ([#2547](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2547)) ([8e7afd9](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/8e7afd90072f1aedabcd932566dec680409baf94))
+* **TPG>=7.10:** bump min google provider to 7.10 for network_tier_config support ([#2527](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/2527)) ([04dc4af](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/commit/04dc4af95f44be045c76c4ef8481bb8e21a0105b))
+
 ## [43.0.0](https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/compare/v42.0.0...v43.0.0) (2025-12-30)
 
 

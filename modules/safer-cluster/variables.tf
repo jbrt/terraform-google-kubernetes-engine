@@ -227,26 +227,28 @@ variable "node_pools_oauth_scopes" {
 
 variable "cluster_autoscaling" {
   type = object({
-    enabled             = bool
-    autoscaling_profile = string
-    min_cpu_cores       = number
-    max_cpu_cores       = number
-    min_memory_gb       = number
-    max_memory_gb       = number
-    gpu_resources       = list(object({ resource_type = string, minimum = number, maximum = number }))
-    auto_repair         = bool
-    auto_upgrade        = bool
+    enabled                      = bool
+    autoscaling_profile          = string
+    min_cpu_cores                = number
+    max_cpu_cores                = number
+    min_memory_gb                = number
+    max_memory_gb                = number
+    gpu_resources                = list(object({ resource_type = string, minimum = number, maximum = number }))
+    auto_repair                  = bool
+    auto_upgrade                 = bool
+    enable_default_compute_class = optional(bool, false)
   })
   default = {
-    enabled             = false
-    autoscaling_profile = "BALANCED"
-    max_cpu_cores       = 0
-    min_cpu_cores       = 0
-    max_memory_gb       = 0
-    min_memory_gb       = 0
-    gpu_resources       = []
-    auto_repair         = true
-    auto_upgrade        = true
+    enabled                      = false
+    autoscaling_profile          = "BALANCED"
+    max_cpu_cores                = 0
+    min_cpu_cores                = 0
+    max_memory_gb                = 0
+    min_memory_gb                = 0
+    gpu_resources                = []
+    auto_repair                  = true
+    auto_upgrade                 = true
+    enable_default_compute_class = false
   }
   description = "Cluster autoscaling configuration. See [more details](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters#clusterautoscaling)"
 }
@@ -494,6 +496,18 @@ variable "gke_backup_agent_config" {
   default     = false
 }
 
+variable "enable_secret_sync" {
+  description = "Enable the Secret Sync add-on for this cluster."
+  type        = bool
+  default     = false
+}
+
+variable "enable_managed_machine_learning_diagnostics" {
+  type        = bool
+  description = "(beta) Enable Managed Machine Learning Diagnostics on the cluster."
+  default     = null
+}
+
 variable "security_posture_mode" {
   description = "Security posture mode.  Accepted values are `DISABLED` and `BASIC`. Defaults to `DISABLED`."
   type        = string
@@ -563,3 +577,19 @@ variable "enable_confidential_nodes" {
   description = "An optional flag to enable confidential node config."
   default     = false
 }
+
+variable "user_managed_keys_config" {
+  type = object({
+    aggregation_ca                    = optional(string)
+    cluster_ca                        = optional(string)
+    control_plane_disk_encryption_key = optional(string)
+    etcd_api_ca                       = optional(string)
+    etcd_peer_ca                      = optional(string)
+    gkeops_etcd_backup_encryption_key = optional(string)
+    service_account_signing_keys      = optional(list(string))
+    service_account_verification_keys = optional(list(string))
+  })
+  description = "The User Managed Keys configuration for the cluster."
+  default     = null
+}
+

@@ -31,9 +31,10 @@ module "gcp-network" {
 
   subnets = [
     {
-      subnet_name   = var.subnetwork
-      subnet_ip     = "10.0.0.0/17"
-      subnet_region = var.region
+      subnet_name           = var.subnetwork
+      subnet_ip             = "10.0.0.0/17"
+      subnet_region         = var.region
+      subnet_private_access = "true"
     },
   ]
 
@@ -53,7 +54,7 @@ module "gcp-network" {
 
 module "gke" {
   source  = "terraform-google-modules/kubernetes-engine/google"
-  version = "~> 43.0"
+  version = "~> 44.0"
 
   project_id             = var.project_id
   name                   = var.cluster_name
